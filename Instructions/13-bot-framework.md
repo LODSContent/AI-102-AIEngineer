@@ -25,42 +25,42 @@ If you have not already cloned **AI-102-AIEngineer** code repository to the envi
 
 You can use the Bot Framework SDK to create a bot based on a template, and then customize the code to meet your specific requirements.
 
-> **Note**: In this exercise, you can choose to use the REST API from either **C#** or **Python**. In the steps below, perform the actions appropriate for your preferred language.
+    > **Note**: In this exercise, you can choose to use the REST API from either **C#** or **Python**. In the steps below, perform the actions appropriate for your preferred language.
 
 1. In Visual Studio Code, in the **Explorer** pane, browse to the **13-bot-framework** folder and expand the **C-Sharp** or **Python** folder depending on your language preference.
 2. Right-click the folder for your chosen language and open an integrated terminal.
 3. In the terminal, run the following commands to install the bot templates and packages you need:
-
-**C#**
-
-```
-dotnet new -i Microsoft.Bot.Framework.CSharp.EchoBot
-dotnet new -i Microsoft.Bot.Framework.CSharp.CoreBot
-dotnet new -i Microsoft.Bot.Framework.CSharp.EmptyBot
-```
-
-**Python**
-
-```
-pip install botbuilder-core
-pip install asyncio
-pip install aiohttp
-pip install cookiecutter==1.7.0
-```
-
+    
+    **C#**
+    
+    ```
+    dotnet new -i Microsoft.Bot.Framework.CSharp.EchoBot
+    dotnet new -i Microsoft.Bot.Framework.CSharp.CoreBot
+    dotnet new -i Microsoft.Bot.Framework.CSharp.EmptyBot
+    ```
+    
+    **Python**
+    
+    ```
+    pip install botbuilder-core
+    pip install asyncio
+    pip install aiohttp
+    pip install cookiecutter==1.7.0
+    ```
+    
 4. After the templates and packages have been installed, run the following command to create a bot based on the *EchoBot* template:
-
-**C#**
-
-```
-dotnet new echobot -n TimeBot
-```
-
-**Python**
-
-```
-cookiecutter https://github.com/microsoft/botbuilder-python/releases/download/Templates/echo.zip
-```
+    
+    **C#**
+    
+    ```
+    dotnet new echobot -n TimeBot
+    ```
+    
+    **Python**
+    
+    ```
+    cookiecutter https://github.com/microsoft/botbuilder-python/releases/download/Templates/echo.zip
+    ```
 
 If you're using Python, when prompted by cookiecutter, enter the following details:
 - **bot_name**: TimeBot
@@ -78,18 +78,18 @@ If you're using Python, when prompted by cookiecutter, enter the following detai
 You've created a bot based on the *EchoBot* template. Now you can run it locally and test it by using the Bot Framework Emulator (which should be installed on your system).
 
 1. In the terminal pane, ensure that the current directory is the **TimeBot** folder containing your bot code files, and then enter the following command to start your bot running locally.
-
-**C#**
-
-```
-dotnet run
-```
-
-**Python**
-
-```
-python app.py
-```
+    
+    **C#**
+    
+    ```
+    dotnet run
+    ```
+    
+    **Python**
+    
+    ```
+    python app.py
+    ```
     
 When the bot starts, note the endpoint at which it is running is shown. This should be similar to **http://localhost:3978**.
 
@@ -112,62 +112,62 @@ You've created a bot that echoes the user's input back to them. It's not particu
     Note that the code in this file consists of *activity handler* functions; one for the *Member Added* conversation update activity (when someone joins the chat session) and another for the *Message* activity (when a message is received). The conversation is based on the concept of *turns*, in which each turn represents an interaction in which the bot receives, processes, and responds to an activity. The *turn context* is used to track information about the activity being processed in the current turn.
 
 2. At the top of the code file, add the following namespace import statement:
-
-**C#**
-
-```C#
-using System;
-```
-
-**Python**
-
-```Python
-from datetime import datetime
-```
+    
+    **C#**
+    
+    ```C#
+    using System;
+    ```
+    
+    **Python**
+    
+    ```Python
+    from datetime import datetime
+    ```
 
 3. Modify the activity handler function for the *Message* activity to match the following code:
-
-**C#**
-
-```C#
-protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
-{
-    string inputMessage = turnContext.Activity.Text;
-    string responseMessage = "Ask me what the time is.";
-    if (inputMessage.ToLower().StartsWith("what") && inputMessage.ToLower().Contains("time"))
+    
+    **C#**
+    
+    ```C#
+    protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
     {
-        var now = DateTime.Now;
-        responseMessage = "The time is " + now.Hour.ToString() + ":" + now.Minute.ToString("D2");
+        string inputMessage = turnContext.Activity.Text;
+        string responseMessage = "Ask me what the time is.";
+        if (inputMessage.ToLower().StartsWith("what") && inputMessage.ToLower().Contains("time"))
+        {
+            var now = DateTime.Now;
+            responseMessage = "The time is " + now.Hour.ToString() + ":" + now.Minute.ToString("D2");
+        }
+        await turnContext.SendActivityAsync(MessageFactory.Text(responseMessage, responseMessage), cancellationToken);
     }
-    await turnContext.SendActivityAsync(MessageFactory.Text(responseMessage, responseMessage), cancellationToken);
-}
-```
-
-**Python**
-
-```Python
-async def on_message_activity(self, turn_context: TurnContext):
-    input_message = turn_context.activity.text
-    response_message = 'Ask me what the time is.'
-    if (input_message.lower().startswith('what') and 'time' in input_message.lower()):
-        now = datetime.now()
-        response_message = 'The time is {}:{:02d}.'.format(now.hour,now.minute)
-    await turn_context.send_activity(response_message)
-```
+    ```
+    
+    **Python**
+    
+    ```Python
+    async def on_message_activity(self, turn_context: TurnContext):
+        input_message = turn_context.activity.text
+        response_message = 'Ask me what the time is.'
+        if (input_message.lower().startswith('what') and 'time' in input_message.lower()):
+            now = datetime.now()
+            response_message = 'The time is {}:{:02d}.'.format(now.hour,now.minute)
+        await turn_context.send_activity(response_message)
+    ```
     
 4. Save your changes, and then in the terminal pane, ensure that the current directory is the **TimeBot** folder containing your bot code files, and then enter the following command to start your bot running locally.
-
-**C#**
-
-```
-dotnet run
-```
-
-**Python**
-
-```
-python app.py
-```
+    
+    **C#**
+    
+    ```
+    dotnet run
+    ```
+    
+    **Python**
+    
+    ```
+    python app.py
+    ```
 
 As before, when the bot starts, note the endpoint at which it is running is shown.
 
@@ -200,23 +200,23 @@ A bot relies on multiple Azure resources, which can be created in a single resou
 Your bot needs an application registration to enable it to communicate with users and web services.
 
 1. In the terminal window for your **TimeBot** folder, enter the following command to use the Azure command line interface (CLI) to log into Azure. When a browser opens, sign into your Azure subscription.
-
-```
-az login
-```
+    
+    ```
+    az login
+    ```
 
 2. If you have multiple Azure subscriptions, enter the following command to select the subscription in which you want to deploy the bot.
-
-```
-az account set --subscription "<YOUR_SUBSCRIPTION_ID>"
-```
+    
+    ```
+    az account set --subscription "<YOUR_SUBSCRIPTION_ID>"
+    ```
 
 3. Enter the following command to create an application registration for **TimeBot** with the password **Super$ecretPassw0rd** (you can use an alternative display name and password if you wish, but make a note of them - you'll need them later).
-
-```
-az ad app create --display-name "TimeBot" --password "Super$ecretPassw0rd" --available-to-other-tenants
-```
-
+    
+    ```
+    az ad app create --display-name "TimeBot" --password "Super$ecretPassw0rd" --available-to-other-tenants
+    ```
+    
 4. When the command completes, a large JSON response is displayed. In this response, find the **appId** value and make a note of it. You will need it in the next procedure.
 
 ### Create Azure resources
@@ -228,10 +228,10 @@ When you use the Bot Framework SDK to create a bot from a template, the Azure Re
     - **YOUR_APP_ID**: The **appId** value you noted in the previous procedure.
     - **REGION**: An Azure region code (such as *eastus*).
     - **All other placeholders**: Unique values that will be used to name the new resources. The resource IDs you specify must be globally unique strings netween 4 and 42 characters long. Make a note of the value you use for the **BotId** and **newWebAppName** parameters - you will need them later.
-
-```
-az deployment group create --resource-group "YOUR_RESOURCE_GROUP" --template-file "deploymenttemplates/template-with-preexisting-rg.json" --parameters appId="YOUR_APP_ID" appSecret="Super$ecretPassw0rd" botId="A_UNIQUE_BOT_ID" newWebAppName="A_UNIQUE_WEB_APP_NAME" newAppServicePlanName="A_UNIQUE_PLAN_NAME" appServicePlanLocation="REGION" --name "A_UNIQUE_SERVICE_NAME"
-```
+    
+    ```
+    az deployment group create --resource-group "YOUR_RESOURCE_GROUP" --template-file "deploymenttemplates/template-with-preexisting-rg.json" --parameters appId="YOUR_APP_ID" appSecret="Super$ecretPassw0rd" botId="A_UNIQUE_BOT_ID" newWebAppName="A_UNIQUE_WEB_APP_NAME" newAppServicePlanName="A_UNIQUE_PLAN_NAME" appServicePlanLocation="REGION" --name "A_UNIQUE_SERVICE_NAME"
+    ```
 
 2. Wait for the command to complete. If it is successful, a JSON response will be displayed.
 
@@ -244,26 +244,26 @@ az deployment group create --resource-group "YOUR_RESOURCE_GROUP" --template-fil
 Now that you have the required Azure resources in place, you can prepare your code for deployment to them.
 
 1. In Visual Studio Code, in the terminal pane for your **TimeBot** folder, enter the following command to prepare your code's dependencies for deployment.
-
-**C#**
-
-```
-az bot prepare-deploy --lang Csharp --code-dir "." --proj-file-path "TimeBot.csproj"
-```
-
-**Python**
-
-```
-rmdir /S /Q  __pycache__
-notepad requirements.txt
-```
+    
+    **C#**
+    
+    ```
+    az bot prepare-deploy --lang Csharp --code-dir "." --proj-file-path "TimeBot.csproj"
+    ```
+    
+    **Python**
+    
+    ```
+    rmdir /S /Q  __pycache__
+    notepad requirements.txt
+    ```
 
 - The second command will open the requirements.txt file for your Python environment in Notepad - modify it to match the following, save the changes, and close Notepad.
-
-```
-botbuilder-core==4.11.0
-aiohttp
-```
+    
+    ```
+    botbuilder-core==4.11.0
+    aiohttp
+    ```
 
 ### Create a zip archive for deployment
 
@@ -280,10 +280,10 @@ Now that your code is prepared, you can deploy it.
 1. In Visual Studio Code, in the terminal pane for your **TimeBot** folder, enter the following command (on a single line) to deploy your packaged code files, replacing the PLACEHOLDER values as follows:
     - **YOUR_RESOURCE_GROUP**: The name of your existing resource group.
     - **YOUR_WEB_APP_NAME**: The unique name you specified for the **newWebAppName** parameter when creating Azure resources.
-
-```
-az webapp deployment source config-zip --resource-group "YOUR_RESOURCE_GROUP" --name "YOUR_WEB_APP_NAME" --src "TimeBot.zip"
-```
+    
+    ```
+    az webapp deployment source config-zip --resource-group "YOUR_RESOURCE_GROUP" --name "YOUR_WEB_APP_NAME" --src "TimeBot.zip"
+    ```
 
 2. In the Azure portal, in the resource group containing your resources, open the **Bot Channels Registration** resource (which will have the name you assigned to the **BotId** parameter when creating Azure resources).
 3. In the **Bot management** section, select **Test in Web Chat**. Then wait for your bot to initialize.
